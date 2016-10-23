@@ -1,15 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
+  <script src="a.js"></script>
     <title>Current location of your device</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+ <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
+      #final{
+       display:none; 
+      }
+      .carr{
+        border-radius : 50%;
+        
+      }
+       #text{
+        height:30px;
+        background-color:white;
+       }
+      #footer1{
+        height:70%;
+        width: 100%;
+        margin:auto;
+      }
       #map {
-        height: 100%;
+        padding-top:2%;
+        margin:auto;
+        height: 66%;
+        width : 80%;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -18,80 +41,291 @@
         padding: 0;
       }
       #text{
-	   width:35%;
-	     }
-    	#nav{
-    		height:10%;
-    		background-color:#5cb85c;
-    	}
-    	#insidenav{
-    		padding-top:18px;
-    	}
+     width:35%;
+       }
+      #nav{
+        height:8%;
+        background-color: #5cb85c;
+      }
+      #insidenav{
+
+        padding-top:1em;
+      }
+      #footer{
+        padding-top:1%;
+        margin:auto;
+        height:20%;
+        width:80%;
+      }
+      .ride{
+        width: 100%;
+        background-color:black;
+        color:yellow;
+      }
+    #q1{
+      position:absolute;
+      bottom:45px;
+      left:240px;
+    }
+    #q2{
+      position:absolute;
+      bottom:45px;
+      left:395px;
+    }
+    #q3{
+      position:absolute;
+      bottom:45px;
+      left:545px;
+    }
+    #q4{
+      position:absolute;
+      bottom:45px;
+      left:700px;
+    }
+    #q5{
+      position:absolute;
+      bottom:45px;
+      left:858px;
+    }
+    #q6{
+      position:absolute;
+      bottom:45px;
+      left:1010px;
+    }
+
+
     </style>
   </head>
   <body>
-  <div id = "nav">	<div id = "insidenav"><center>Enter Location : <input type = "text" id = "text"> <button id = "search"> Search </button></center></div></div>
+
+<div id="a" class="modal">
+  <div class="modal-content">
+    <h4 id = "modalheader"><center>ERROR!!</center></h4>
+    <p id = "modalfoot">please select CAB</p>
+  </div>
+  <div class="modal-footer" id = "modalfooter">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+  </div>
+</div>
+  
+
+<div id="b" class="modal">
+  <div class="modal-content2">
+    <h4 id = "modalheader2"><center>Please select your destination</center></h4>
+    <p id = "modalfoot2"></p>
+  </div>
+  <div class="modal-footer" id = "modalfooter">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+  </div>
+</div>
+
+<div id="c" class="modal">
+  <div class="modal-content3">
+    <h4 id = "modalheader3"><center>Your ride has been selected</center></h4>
+    Your Source location is <div id = "x1"></div><BR>
+    Your Destination location is <div id = "x2"></div><BR>
+    Your Selected Car is <div id = "x3"></div><BR>
+    Your Booking time is <div id = "x4"></div><BR>
+  </div>
+  <div class="modal-footer" id = "modalfooter">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+  </div>
+</div>
+
+  <div id = "nav">  <div id = "insidenav"><center>Enter Location : <input type = "text" id = "text"> <button id = "search"> Search </button> <button id = "final">finalize destination</button></center></div></div>
     <div id="map"></div>
-    <script>
+
+<script>
       // Note: This example requires that you consent to location sharing when
       // prompted by your browser. If you see the error "The Geolocation service
       // failed.", it means you probably did not give permission for the browser to
       // locate you.
       var map;
       var infoWindow;
-
-
-
+      var source;
+      var destination;
+      var current_Location_Name;
+      var selected_car;
       $("document").ready(function(){
-      	
+        var flag = 0;
+        $("#a1").click(function(){
+          $(".carr").css("background-color","white");
+          $("#a1").css("background-color","yellow")
+          flag = 1;
+          $("#modalheader").text("Ride Book Successful");
+          $("#modalfoot").text("Your Mini car will arrive soon");
+          selected_car = "Mini";
+        });
+        $("#a2").click(function(){
+          $(".carr").css("background-color","white");
+          $("#a2").css("background-color","yellow")
+          flag = 2;
+          $("#modalheader").text("Ride Book Successful");
+          $("#modalfoot").text("Your Micro car will arrive soon");
+          selected_car = "Micro";
+          });
+        $("#a3").click(function(){
+          $(".carr").css("background-color","white");
+          $("#a3").css("background-color","yellow")
+          flag = 3;
+          $("#modalheader").text("Ride Book Successful");
+          $("#modalfoot").text("Your Sedan car will arrive soon");
+          selected_car = "Sedan";
+        });
+        $("#a4").click(function(){
+          $(".carr").css("background-color","white");
+          $("#a4").css("background-color","yellow")
+          flag = 4;
+          $("#modalheader").text("Ride Book Successful");
+          $("#modalfoot").text("Your Rental car will arrive soon");
+          selected_car = "Rental";
+        });
+        $("#a5").click(function(){
+          $(".carr").css("background-color","white");
+          $("#a5").css("background-color","yellow")
+          flag = 5;
+          $("#modalheader").text("Ride Book Successful");
+          $("#modalfoot").text("Your Share car will arrive soon");
+          selected_car = "Share";
+        });
+        $("#a6").click(function(){
+          $(".carr").css("background-color","white");
+          $("#a6").css("background-color","yellow")
+          flag = 6;
+          $("#modalheader").text("Ride Book Successful");
+          $("#modalfoot").text("Your Prime car will arrive soon");
+          selected_car = "Prime";
+        });
 
-      	function set_Position(Lat,Long){
-        	
-      // alert(Lat);
-        	pos = {
-              lat: Lat,
-              lng: Long
-            };
-        	infoWindow.setPosition(pos);
-        	map.setCenter(pos);
-        	getName(Lat,Long);
-        }
 
 
-      	function setCharAt(str,index,chr) {
+        $("#a1").hover(function(){
+            $("#a1").css("background-color","yellow");
+        },function(){
+            if(flag==0||flag!=1)
+            $("#a1").css("background-color","white");
+        });
+        $("#a2").hover(function(){
+            $("#a2").css("background-color","yellow");
+        },function(){
+          if(flag==0||flag!=2)
+            $("#a2").css("background-color","white");
+        });
+        $("#a3").hover(function(){
+            $("#a3").css("background-color","yellow");
+        },function(){
+          if(flag==0||flag!=3)
+            $("#a3").css("background-color","white");
+        });
+        $("#a4").hover(function(){
+            $("#a4").css("background-color","yellow");
+        },function(){
+          if(flag==0||flag!=4)
+            $("#a4").css("background-color","white");
+        });
+        $("#a5").hover(function(){
+            $("#a5").css("background-color","yellow");
+        },function(){
+          if(flag==0||flag!=5)
+            $("#a5").css("background-color","white");
+        });
+        $("#a6").hover(function(){
+          if(flag==0||flag!=6)
+            $("#a6").css("background-color","yellow");
+        },function(){
+            $("#a6").css("background-color","white");
+        });
+
+    $("#ridelater").click(function(){
+            
+           // alert("arvind");
+          source = current_Location_Name;
+          if(flag!=0){
+          $("#b").openModal();
+          $("#final").show();
+          }
+          $("#a").openModal();
+
+
+
+          });
+
+          $("#ridenow").click(function(){
+            
+           // alert("arvind");
+           source = current_Location_Name;
+          if(flag!=0){
+          $("#b").openModal();
+          $("#final").show();
+          }
+          $("#a").openModal();
+
+
+
+          });
+
+        function setCharAt(str,index,chr) {
     if(index > str.length-1) return str;
     return str.substr(0,index) + chr + str.substr(index+1);
 }
-      	$("#search").click(function(){
-      			var x = $("#text").val();
-      			for(i = 0;i<x.length;i++){
-      				if(x[i] == ' ')
-      					x = setCharAt(x,i,'+');
-      			}
-      	
-      	var api = "https://maps.googleapis.com/maps/api/geocode/json?address="+x+"&key=AIzaSyBNDNLipGt34N7xpvA_mpk2Yb24hGQT594";
-      	$.ajax({
-      			url : api,
-      			success : function(result){
-      			//alert("arvind");
-      			set_Position(result["results"][0]["geometry"]["location"]["lat"],result["results"][0]["geometry"]["location"]["lng"]);
-      			}
-      		});
+
+        $("#final").click(function(){
+          var time;
+          var cur_Date = new Date();
+          time = cur_Date.getHours()+":"+cur_Date.getMinutes();
+          destination = current_Location_Name;
+          $("#x1").text(source);
+          $("#x2").text(destination);
+          $("#x3").text(selected_car);
+          $("#x4").text(time);
+          $("#c").openModal();
+        });
+
+        $("#search").click(function(){
+            
+            $("#final").hide();
+            var x = $("#text").val();
+            for(i = 0;i<x.length;i++){
+              if(x[i] == ' ')
+                x = setCharAt(x,i,'+');
+            }
+        
+        var api = "https://maps.googleapis.com/maps/api/geocode/json?address="+x+"&key=AIzaSyBNDNLipGt34N7xpvA_mpk2Yb24hGQT594";
+        $.ajax({
+            url : api,
+            success : function(result){
+            //alert("arvind");
+            var aaa;
+            //alert(result["results"][0]["geometry"]["location"]["lat"],result["results"][0]["geometry"]["location"]["lng"]);
+            aaa = {
+              lat: result["results"][0]["geometry"]["location"]["lat"],
+              lng: result["results"][0]["geometry"]["location"]["lng"]
+            };
+          infoWindow.setPosition(aaa);
+          map.setCenter(aaa);
+            //infoWindow.setPosition(pos);
+            getName(result["results"][0]["geometry"]["location"]["lat"],result["results"][0]["geometry"]["location"]["lng"]);
+           
+            }
+          });
+
      });
       
-});	
+}); 
 
       function getName(lat,long){
-      		var URL = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat + "," + long + "&key=AIzaSyBNDNLipGt34N7xpvA_mpk2Yb24hGQT594";
-      		//infowindow.setContent("asdf");
-      		$.ajax({
-      			url : URL,
-      			success : function(result){
-      				infoWindow.setContent(result["results"][0]["formatted_address"]);
-      				$("#text").val(result["results"][0]["formatted_address"]);
-      			}
-      		});
-      	
+          var URL = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat + "," + long + "&key=AIzaSyBNDNLipGt34N7xpvA_mpk2Yb24hGQT594";
+          //infowindow.setContent("asdf");
+          $.ajax({
+            url : URL,
+            success : function(result){
+              infoWindow.setContent(result["results"][0]["formatted_address"]);
+              $("#text").val(result["results"][0]["formatted_address"]);
+              current_Location_Name = result["results"][0]["formatted_address"];
+              //alert(current_Location_Name);
+            }
+          });
+        
       };
 
       function initMap() {
@@ -101,15 +335,15 @@
         });
 
 google.maps.event.addListener(map,'click',function(e){
-	//alert("Arvind");
-	var Lat = e.latLng.lat(); var Long = e.latLng.lng();
-	pos = {
+  //alert("Arvind");
+  var Lat = e.latLng.lat(); var Long = e.latLng.lng();
+  pos = {
               lat: Lat,
               lng: Long
             };
-        	infoWindow.setPosition(pos);
-        	map.setCenter(pos);
-        	getName(Lat,Long);
+          infoWindow.setPosition(pos);
+          //map.setCenter(pos);
+          getName(Lat,Long);
 });
 
         function success (position){
@@ -138,8 +372,8 @@ google.maps.event.addListener(map,'click',function(e){
         }
         
   /* var geocoder = new google.maps.Geocoder;
-     	console.log(geocoder);
-     	
+      console.log(geocoder);
+      
 
 var latlong = {'lat': 42,'lng':32};
 geocoder.geocode({'location': latlong}, function(results, status) {
@@ -167,5 +401,28 @@ geocoder.geocode({'location': latlong}, function(results, status) {
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNDNLipGt34N7xpvA_mpk2Yb24hGQT594&callback=initMap">
     </script>
+    
+  <div id = "footer">
+      <div id = "footer1">
+      <div class = "row">
+      <div class = "col s2 center carr" id = "a1"> Mini <img class = "circle" src = "car.png" style = " height:90px;width:120px"></div>
+      <div class = "col s2 center carr" id = "a2">Micro<img class = "circle" src = "car.png" style = "height:90px;width:120px"></div>
+      <div class = "col s2 center carr" id = "a3">Sedan<img class = "circle"  src = "car.png" style = "height:90px;width:120px"></div>
+      <div class = "col s2 center carr" id = "a4">Rental<img class = "circle"  src = "car.png" style = "height:90px;width:120px"></div>
+      <div class = "col s2 center carr" id = "a5">Share<img class = "circle"  src = "car.png" style = "height:90px;width:120px"></div>
+      <div class = "col s2 center carr" id = "a6">Prime<img class = "circle"  src = "car.png" style = "height:90px;width:120px"></div>
+      </div>
+      </div>
+
+      <div id = "footer2">
+        <div class = "row">
+          <div class = "col s6"><button class = "ride" id = "ridenow">RIDE NOW</button></div>
+          <div class = "col s6"><button class = "ride" = id = "ridelater" >RIDE LATER</button></div>
+        </div>
+      </div>
+  </div>
+
+
+  
   </body>
 </html>
